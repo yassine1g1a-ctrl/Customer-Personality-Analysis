@@ -1,0 +1,34 @@
+,Description
+Family_Size,Adults + children at home
+Income_per_Capita,Income / Family_Size
+Spend_per_Capita,Total_Spent / Family_Size
+Dependency_Ratio,Children_Home / Family_Size
+Wines_Share,Wines / Total_Spent (0 when Total_Spent=0)
+Fruits_Share,Fruits / Total_Spent
+Meat_Share,Meat / Total_Spent
+Fish_Share,Fish / Total_Spent
+Sweets_Share,Sweets / Total_Spent
+Gold_Share,Gold / Total_Spent
+Num_Categories_Active,# categories with spend > 0
+Category_Concentration,Herfindahl over shares (focus vs variety)
+Premium_Tilt,(Gold + Wines) / Total_Spent
+Total_Purchases,Web + Catalog + Store purchases
+Avg_Spend_per_Purchase,Total_Spent / Total_Purchases
+Web_Share,NumWebPurchases / Total_Purchases
+Catalog_Share,NumCatalogPurchases / Total_Purchases
+Store_Share,NumStorePurchases / Total_Purchases
+Deals_Share,NumDealsPurchases / Total_Purchases
+Past_Accepted,# accepted past campaigns (1–5)
+Ever_Accepted_Past,1 if any past accepted
+Campaign_Accept_Rate,Past_Accepted / 5
+Tenure_Months,Customer_Tenure_Days / 30
+Frequency_pm,Total_Purchases / Tenure_Months
+Monetary,Total_Spent
+log_Monetary,log1p(Total_Spent)
+R_score/F_score/M_score/RFM_Total,RFM quantile scores
+log_Income,log1p(Income)
+log_Total_Spent,log1p(Total_Spent)
+Income_x_HasPartner,Income * Has_Partner
+Age_x_WebShare,Age * Web_Share
+Age_Bin,Age buckets
+Income_q,Income quintile
