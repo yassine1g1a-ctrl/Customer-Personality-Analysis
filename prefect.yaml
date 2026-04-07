@@ -1,0 +1,24 @@
+# Prefect Deployment Configuration
+# Installs dependencies AFTER cloning the repository
+
+build: []
+push: []
+
+pull:
+  # STEP 1: Clone GitHub repo first (so requirements.txt is available)
+  - type: git_clone
+    repository: https://github.com/{{ GITHUB_USER }}/{{ REPO_NAME }}
+    branch: main
+  
+  # STEP 2: Then install dependencies from the cloned repo
+  - type: run_shell_script
+    commands:
+      - pip install --upgrade pip setuptools wheel
+      - pip install -r requirements.txt
+
+deployments:
+  - name: customer-analysis-pipeline
+    version: 1.0
+    entrypoint: pipeline.py:customer_personality_pipeline
+    schedule: null
+    parameters: {}

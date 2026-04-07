@@ -1,0 +1,48 @@
+name: Deploy to Prefect Cloud
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:  # Allow manual trigger
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.12'
+      
+      - name: Install Prefect
+        run: |
+          pip install --upgrade pip
+          pip install prefect prefect-cloud
+      
+      - name: Authenticate with Prefect Cloud
+        env:
+          PREFECT_API_KEY: ${{ secrets.PREFECT_API_KEY }}
+          PREFECT_API_URL: https://api.prefect.cloud/api
+        run: |
+          prefect config set PREFECT_API_KEY="$PREFECT_API_KEY"
+          prefect config set PREFECT_API_URL="$PREFECT_API_URL"
+      
+      - name: Deploy flow
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          # Deploy the flow to Prefect Cloud
+          # Replace <owner>/<repo> with your actual GitHub repo path
+          prefect deploy \
+            --from-prefect-yaml \
+            --deployment-name customer-analysis-pipeline
+      
+      - name: Confirm deployment
+        run: |
+          echo "✓ Deployment complete!"
+          echo "View your flow: https://cloud.prefect.io"

@@ -21,7 +21,31 @@ Schedule (daily at midnight UTC):
 """
 
 import os
+import sys
+import subprocess
 
+# ─── ENSURE DEPENDENCIES ARE INSTALLED ───────────────────────────────────────
+# This is crucial for Prefect Cloud where pip install may run in a different env
+def ensure_dependencies():
+    """Install missing dependencies if not already present."""
+    required = ["papermill", "prefect"]
+    missing = []
+    
+    for pkg in required:
+        try:
+            __import__(pkg)
+        except ImportError:
+            missing.append(pkg)
+    
+    if missing:
+        import sys
+        print(f"⚠ Installing missing packages: {', '.join(missing)}")
+        subprocess.check_call([sys.executable, "-m", "pip", "install", "--quiet"] + missing)
+        print(f"✓ Packages installed: {', '.join(missing)}")
+
+ensure_dependencies()
+
+# ─── NOW SAFE TO IMPORT ──────────────────────────────────────────────────────
 import papermill as pm
 from prefect import flow, task
 from prefect.logging import get_run_logger

@@ -123,7 +123,7 @@ Four customer personas emerged:
 pip install -r requirements.txt
 ```
 
-### Run the pipeline
+### Run the pipeline locally
 
 Run the notebooks in order (01 → 05) in JupyterLab or VS Code. Each notebook reads outputs from the previous one. Alternatively:
 
@@ -134,6 +134,52 @@ jupyter nbconvert --to notebook --execute 03_Clustering_Models.ipynb
 jupyter nbconvert --to notebook --execute 04_Classification_Models.ipynb
 jupyter nbconvert --to notebook --execute 05_Model_Evaluation.ipynb
 ```
+
+### Run with Prefect (local)
+
+To run the pipeline with Prefect orchestration locally:
+
+```bash
+python pipeline.py
+```
+
+This will execute all 5 notebooks in sequence using `papermill`, with automatic retry on failure.
+
+---
+
+## Prefect Cloud Deployment
+
+This pipeline can be deployed to **Prefect Cloud** for scheduled, monitored execution in the cloud.
+
+### Quick start
+
+1. **Create a free account**: [cloud.prefect.io](https://cloud.prefect.io)
+2. **Authenticate**: `uvx prefect-cloud login`
+3. **Deploy**: See [DEPLOY_PREFECT_CLOUD.md](DEPLOY_PREFECT_CLOUD.md) for full instructions
+
+### Example: Deploy & schedule
+
+```bash
+# Deploy
+uvx prefect-cloud deploy pipeline.py:customer_personality_pipeline \
+    --from <your-github-username>/Customer-Personality-Analysis \
+    --name customer-analysis-pipeline
+
+# Run manually
+uvx prefect-cloud run customer_personality_pipeline/customer-analysis-pipeline
+
+# Schedule daily at midnight
+uvx prefect-cloud schedule customer_personality_pipeline/customer-analysis-pipeline "0 0 * * *"
+```
+
+**Features:**
+- ✅ Automatic retry on failure (max 1 retry, 30–60s backoff)
+- ✅ Real-time logs in the Prefect Cloud dashboard
+- ✅ Email/Slack notifications on success or failure
+- ✅ Version control integration (auto-pull from GitHub)
+- ✅ Parameterizable runs (override model hyperparameters at runtime)
+
+See [DEPLOY_PREFECT_CLOUD.md](DEPLOY_PREFECT_CLOUD.md) for full deployment guide and troubleshooting.
 
 ---
 
