@@ -28,7 +28,7 @@ import subprocess
 # This is crucial for Prefect Cloud where pip install may run in a different env
 def ensure_dependencies():
     """Install missing dependencies if not already present."""
-    required = ["papermill", "prefect"]
+    required = ["papermill", "prefect", "ipykernel", "jupyter"]
     missing = []
     
     for pkg in required:
@@ -42,6 +42,18 @@ def ensure_dependencies():
         print(f"⚠ Installing missing packages: {', '.join(missing)}")
         subprocess.check_call([sys.executable, "-m", "pip", "install", "--quiet"] + missing)
         print(f"✓ Packages installed: {', '.join(missing)}")
+    
+    # Register Python kernel for Jupyter/Papermill
+    try:
+        print("📌 Registering Python kernel for Jupyter…")
+        subprocess.check_call(
+            [sys.executable, "-m", "ipykernel", "install", "--user", "--name", "python3"],
+            stdout=subprocess.DEVNULL,
+            stderr=subprocess.DEVNULL
+        )
+        print("✓ Kernel registered as 'python3'")
+    except Exception as e:
+        print(f"⚠ Kernel registration warning: {e} (continuing anyway…)")
 
 ensure_dependencies()
 
@@ -89,7 +101,6 @@ def run_feature_engineering(
             "RANDOM_SEED": random_seed,
         },
         cwd=REPO_ROOT,
-        kernel_name="python3",
     )
     logger.info(f"Feature Engineering done → {data_out}")
     return data_out
@@ -114,7 +125,6 @@ def run_eda(
             "RANDOM_SEED": random_seed,
         },
         cwd=REPO_ROOT,
-        kernel_name="python3",
     )
     logger.info("EDA done.")
 
@@ -142,7 +152,6 @@ def run_clustering(
             "N_CLUSTERS": n_clusters,
         },
         cwd=REPO_ROOT,
-        kernel_name="python3",
     )
     logger.info("Clustering done.")
 
@@ -176,7 +185,6 @@ def run_classification(
             "LEARNING_RATE": learning_rate,
         },
         cwd=REPO_ROOT,
-        kernel_name="python3",
     )
     logger.info("Classification done.")
 
@@ -202,7 +210,6 @@ def run_evaluation(
             "TOP_N_FEATURES": top_n_features,
         },
         cwd=REPO_ROOT,
-        kernel_name="python3",
     )
     logger.info("Model Evaluation done.")
 

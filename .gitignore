@@ -1,7 +1,8 @@
 # ── Jupyter ──────────────────────────────────────────────────────
 .ipynb_checkpoints/
 */.ipynb_checkpoints/
-
+# Papermill output notebooks (generated during runs) – don't track these
+*_output.ipynb
 # ── Python ───────────────────────────────────────────────────────
 __pycache__/
 *.py[cod]
